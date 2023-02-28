@@ -1,21 +1,29 @@
+require("dotenv").config();
 const express = require("express");
-const connect=require("./src/config/db")
-const app = express();
-require('dotenv').config()
-console.log(process.env)
+const cors = require("cors");
+const connect = require("./src/congif/db");
 const PORT = process.env.PORT || 8080;
 
 
-app.get("", async (req, res) => {
-    res.send({ msg: "Hello User" })
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+
+
+app.get("/", async (req, res) => {
+    res.send("Hello")
 })
-let URL=process.env.URL
-// console.log(URL)
-// app.listen(PORT,async()=>{
-//    try {
-//     await connect();
-//     console.log("Connected to DB")
-//    } catch (error) {
-//     console.log(error)
-//    }
-// })
+app.get("/api", async (req, res) => {
+    res.send("Hello to the api")
+})
+
+
+app.listen(PORT, async (req, res) => {
+    try {
+        await connect();
+        console.log(`http://localhost:${PORT}`)
+    } catch (error) {
+        console.log(error);
+    }
+})
