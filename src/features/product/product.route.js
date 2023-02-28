@@ -5,7 +5,19 @@ const app = express.Router();
 app.get("", async (req, res) => {
     const { category, dSort, input, page = 1, limit = 4 } = req.query;
     try {
-        if (category) {
+        if (dSort && category) {
+            if (dSort === "asc" && category) {
+                const product = await Product.find({ category }).sort({ postedAt: 1 })
+                    .skip((page - 1) * limit)
+                    .limit(limit);
+                return res.status(200).send(product);
+            } else if (dSort === "desc" && category) {
+                const product = await Product.find({ category }).sort({ postedAt: -1 })
+                    .skip((page - 1) * limit)
+                    .limit(limit);;
+                return res.status(200).send(product);
+            }
+        } else if (category) {
             let product = await Product.find({ category })
                 .skip((page - 1) * limit)
                 .limit(limit);
